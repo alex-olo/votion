@@ -42,45 +42,35 @@
 </div>
 </body>
 <script>
-    function test2() {
-        var di = document.getElementById("di");
-        di.innerHTML = "app have not installed";
-    }
-//            setTimeout(function() {
-//                window.location = "votion://binovate/" + id;
-//            }, 2000);
-        $(document).ready(function(){
-            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            var appStore = "'itms://itunes.apple.com/us/app/youtube/id544007664?mt=8'";
-            var gPlay = "com.shazam.android";
-            var app = "votion://binovate/";
-            var id = window.location.search.substr(12, window.location.search.length - 1);
-            if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/Android/i)) {
+$(document).ready(function(){
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/Android/i)) {
+        loaded = false;
+        var app = "votion://binovate/";
+        var id = window.location.search.substr(12, window.location.search.length - 1);
+        iframeApp = "<iframe id='app' src="+ app + id + "></iframe>";
+        $('body').append(iframeApp);
+        $('body iframe').attr("src", app + id)
+                .bind('load', function (e) {
+                    console.log(this);
+                    loaded = true;
+                    $('#app').hide();
+                });
+        setTimeout(function () {
+            if (loaded == true) {
+                var appStore = "'itms://itunes.apple.com/us/app/youtube/id544007664?mt=8'";
+                var gPlay = "com.shazam.android";
+
                 if (userAgent.match(/Android/i)) {
-                    setTimeout(function () {
-                        window.location = "market://details?id=" + gPlay;
-                    }, 3000);
+                    window.location.replace("market://details?id=" + gPlay);
                 }
                 else {
-                    setTimeout(function () {
-                        window.location = appStore;
-                    }, 3000);
+                    window.location.replace(appStore);
                 }
-                jQuery.ajax({
-                    type: "GET",
-                    url: "votion://binovate/" + id,
-                    dataType:"json",
-                    success:function(response){
-                        if (response.redirect) {
-                            window.location.replace("votion://binovate/" + id);
-                        }
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        alert('Error!  Status = ' + xhr.status);
-                    }
 
-                });
             }
-        });
+        }, 200);
+    }
+});
 </script>
 </html>
