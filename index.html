@@ -2,23 +2,6 @@
 <html lang="en">
 <head>
     <script src="js/jquery-2.2.3.js"></script>
-    <script>
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        var appStore = "'itms://itunes.apple.com/us/app/youtube/id544007664?mt=8'";
-        var gPlay = "com.shazam.android";
-        var app = "instagram://user?username=mr.t.odo";
-        var id = window.location.search.substr(1, window.location.search.length - 1);
-
-        if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i) || userAgent.match(/Android/i)) {
-            if (userAgent.match(/Android/i)) {
-                setTimeout("window.location = 'market://details?id=" + gPlay + "'", 25);
-            }
-            else {
-                setTimeout("window.location = " + appStore, 25);
-            }
-            window.location = app + id;
-        }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -29,7 +12,7 @@
 
 </head>
 <body>
-<div class="container-fluid mainblock text-lg-center text-md-center text-sm-center text-xl-center text-xs-center">
+<div id="di" class="container-fluid mainblock text-lg-center text-md-center text-sm-center text-xl-center text-xs-center">
     <div class="row">
         <img src="http://votion.binovate.com/static/webAPI/assets/img/logo.png" class="" alt="Votion Logo">
     </div>
@@ -55,6 +38,49 @@
                style="display: inline-block;overflow:hidden;background:url(https://play.google.com/intl/en_us/badges/images/badge_new.png) no-repeat;width:165px;height:50px;"></a>
         </span>
     </div>
+    <a href="intent://scan/#Intent;scheme=zxing;package=com.google.zxing.client.android;end">test</a>
 </div>
 </body>
+<script>
+    function test2() {
+        var di = document.getElementById("di");
+        di.innerHTML = "app have not installed";
+    }
+//            setTimeout(function() {
+//                window.location = "votion://binovate/" + id;
+//            }, 2000);
+        $(document).ready(function(){
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            var appStore = "'itms://itunes.apple.com/us/app/youtube/id544007664?mt=8'";
+            var gPlay = "com.shazam.android";
+            var app = "votion://binovate/";
+            var id = window.location.search.substr(12, window.location.search.length - 1);
+            if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/Android/i)) {
+                if (userAgent.match(/Android/i)) {
+                    setTimeout(function () {
+                        window.location = "market://details?id=" + gPlay;
+                    }, 3000);
+                }
+                else {
+                    setTimeout(function () {
+                        window.location = appStore;
+                    }, 3000);
+                }
+                jQuery.ajax({
+                    type: "GET",
+                    url: "votion://binovate/" + id,
+                    dataType:"json",
+                    success:function(response){
+                        if (response.redirect) {
+                            window.location.replace("votion://binovate/" + id);
+                        }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        alert('Error!  Status = ' + xhr.status);
+                    }
+
+                });
+            }
+        });
+</script>
 </html>
